@@ -1,0 +1,17 @@
+Add_product 23 sweatshirt  1
+Add_product 56 skirt       2
+Add_product 95 hat         6
+Add_product 11 coat  10
+Add_product 46 gloves       7
+Add_product 103 shoes         6
+
+
+Is_Available 23                 
+Is_Available 103                
+Is_Available 96                 
+Is_Available 24                 
+Is_Available 11                
+Is_Available 46                 
+               
+Quit 
+        
