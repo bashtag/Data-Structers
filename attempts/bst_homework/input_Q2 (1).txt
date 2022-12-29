@@ -1,0 +1,33 @@
+Add_Captain  806 Pelin 
+Add_Captain  807 Adem 
+Add_Captain  832 Canberk 
+Add_Captain  827 Buket 
+Add_Captain  823 Onur 
+Add_Captain  845 Emre 
+Add_Captain  811 Hamza 
+Add_Captain  817 Yunus 
+
+Is_Available  823 Onur 
+Is_Available  845 Emre 
+Is_Available  811 Hamza 
+Is_Available  817 Yunus 
+Is_Available  815 Asım 
+Is_Available  819 Beyza              
+
+
+Display_captain 819
+Display_captain 833
+
+Finish 833 0
+Finish 845 1
+Finish 845 1
+Finish 845 1
+Finish 815 0
+
+Delete_captain 807
+Delete_captain 820
+Delete_captain 806
+
+Display_all_captains
+          
+Quit 

@@ -1,0 +1,16 @@
+Add_product 30 trousers  1
+Add_product 26 skirt       2
+Add_product 91 boats         6
+Add_product 11 coat  10
+Add_product 46 gloves       7
+Add_product 103 shoes         6
+
+
+Is_Available 91                 
+Is_Available 26                
+Is_Available 96                 
+Is_Available 105                 
+Is_Available 30                 
+               
+Quit 
+        
