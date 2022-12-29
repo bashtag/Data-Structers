@@ -1,2 +1,2 @@
-# Data-Structors
+# Data-Structers
 CSE-222 lesson homeworks and some notes given by Fatih Erdoğan Sevilgen
