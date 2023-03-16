@@ -1,0 +1,3 @@
+public enum BType {
+	HOUSE, MARKET, OFFICE, PLAYGROUND
+}
