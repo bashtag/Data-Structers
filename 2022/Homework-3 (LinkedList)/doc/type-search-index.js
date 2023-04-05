@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"<Unnamed>","l":"LDLinkedList.DescendingIterator"},{"p":"<Unnamed>","l":"LDLinkedList"},{"p":"<Unnamed>","l":"LDLinkedList.Node"}];updateSearchResults();
