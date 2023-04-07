@@ -23,11 +23,22 @@ public class Q4 {
 	}
 
 	private static int	numOfDigits(int num) {
-		return (1);
+		int	n = 0;
+
+		while (num > 0) {
+			num /= 10;
+			n++;
+		}
+
+		return (n);
 	}
 
 	private static int[]	splitInteger(int num, int del) {
+		int[]	splitNums = new int[2];
 
-		return (new int[]{});
+		splitNums[0] = num / (int) Math.pow(10, del);
+		splitNums[1] = num % (int) Math.pow(10, del);
+
+		return (splitNums);
 	}
 }
