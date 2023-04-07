@@ -47,7 +47,12 @@ public class LDLinkedList<T> extends AbstractList<T> implements Deque<T> {
 	
 	private Node<T>	head = null;
 	private Node<T>	tail = null;
+
+	/**
+	 * Trash is a list of lazily deleted elements.
+	 */
 	private Node<T>	trash = null;
+
 	private int	length = 0;
 
 	/**
@@ -76,6 +81,11 @@ public class LDLinkedList<T> extends AbstractList<T> implements Deque<T> {
 		}
 	}
 
+	/**
+	 * Add an element at the index.
+	 * @param index
+	 * @param element
+	 */
 	@Override
 	public void add(int index, T element) {
 		
@@ -96,6 +106,10 @@ public class LDLinkedList<T> extends AbstractList<T> implements Deque<T> {
 		}
 	}
 
+	/**
+	 * Add an element at the beginning of the list.
+	 * @param element
+	 */
 	@Override
 	public void	addFirst(T element) {
 		head = createNewNode(element, head);
@@ -105,6 +119,10 @@ public class LDLinkedList<T> extends AbstractList<T> implements Deque<T> {
 			tail = head;
 	}
 
+	/**
+	 * Add an element at the end of the list.
+	 * @param element
+	 */
 	@Override
 	public void	addLast(T element) {
 		tail.next = createNewNode(element);
@@ -113,16 +131,27 @@ public class LDLinkedList<T> extends AbstractList<T> implements Deque<T> {
 		length++;
 	}
 
+	/**
+	 * @return the size of the list
+	 */
 	@Override
 	public int	size() {
 		return (this.length);
 	}
 
+	/**
+	 * @return elemnt at the index
+	 */
 	@Override
 	public T get(int index) {
 		return (getNode(index).data);
 	}
 
+	/**
+	 * @return node at the index
+	 * @throws IndexOutOfBoundsException
+	 * @param index
+	 */
 	public Node<T>	getNode(int index) {
 		Node<T>	node = head;
 
@@ -135,6 +164,9 @@ public class LDLinkedList<T> extends AbstractList<T> implements Deque<T> {
 		return (node);
 	}
 
+	/**
+	 * @return shallow copy of the list
+	 */
 	@Override
 	protected Object clone() throws CloneNotSupportedException {
 		LDLinkedList<T>	copy = new LDLinkedList<T>();
@@ -151,12 +183,22 @@ public class LDLinkedList<T> extends AbstractList<T> implements Deque<T> {
 		return (copy);
 	}
 
+	/**
+	 * Add an element at the beginning of the list.
+	 * @param element
+	 * @return true
+	 */
 	@Override
 	public boolean offerFirst(T e) {
 		this.addFirst(e);
 		return (true);
 	}
 
+	/**
+	 * Add an element at the end of the list.
+	 * @param element
+	 * @return true
+	 */
 	@Override
 	public boolean offerLast(T e) {
 		this.addLast(e);
@@ -212,36 +254,63 @@ public class LDLinkedList<T> extends AbstractList<T> implements Deque<T> {
 		return (this.trash.data);
 	}
 
+	/**
+	 * Removing the beginning of the list.
+	 * @return removed element
+	 */
 	@Override
 	public T pollFirst() {
 		return (this.removeFirst());
 	}
 
+	/**
+	 * Removing the end of the list.
+	 * @return removed element
+	 */
 	@Override
 	public T pollLast() {
 		return (this.removeLast());
 	}
 
+	/**
+	 * @return the first element of the list
+	 */
 	@Override
 	public T getFirst() {
 		return (this.head.data);
 	}
 
+	/**
+	 * @return the last element of the list
+	 */
 	@Override
 	public T getLast() {
 		return (this.tail.data);
 	}
 
+	/**
+	 * this function is same as getFirst()
+	 * @return the first element of the list
+	 */
 	@Override
 	public T peekFirst() {
 		return (this.getFirst());
 	}
 
+	/**
+	 * this function is same as getLast()
+	 * @return the last element of the list
+	 */
 	@Override
 	public T peekLast() {
 		return (this.getLast());
 	}
 
+	/**
+	 * Remove the first occurrence of the specified element from this list, if it is present.
+	 * @param element
+	 * @return true if the removing is successful
+	 */
 	@Override
 	public boolean removeFirstOccurrence(Object o) {
 		int	index = indexOf(o);
@@ -254,6 +323,11 @@ public class LDLinkedList<T> extends AbstractList<T> implements Deque<T> {
 		return (false);
 	}
 
+	/**
+	 * Remove the last occurrence of the specified element from this list, if it is present.
+	 * @param element
+	 * @return true if the removing is successful
+	 */
 	@Override
 	public boolean removeLastOccurrence(Object o) {
 		int	index = lastIndexOf(o);
@@ -267,37 +341,71 @@ public class LDLinkedList<T> extends AbstractList<T> implements Deque<T> {
 	}
 
 
+	/**
+	 * Add an element at the end of the list.
+	 * This function is same as addLast()
+	 * @param element
+	 * @return true
+	 */
 	@Override
 	public boolean offer(T e) {
 		this.addLast(e);
 		return (true);
 	}
 
+	/**
+	 * Removing the beginning of the list.
+	 * This function is same as removeFirst()
+	 * @return removed element
+	 */
 	@Override
 	public T remove() {
 		return (this.removeFirst());
 	}
 
+	/**
+	 * Removing the beginning of the list.
+	 * This function is same as removeFirst()
+	 * @return removed element
+	 */
 	@Override
 	public T poll() {
 		return (this.removeFirst());
 	}
 
+	/**
+	 * this function is same as getFirst()
+	 * @return the first element of the list
+	 */
 	@Override
 	public T element() {
 		return (this.getFirst());
 	}
 
+	/**
+	 * this function is same as getFirst()
+	 * @return the first element of the list
+	 */
 	@Override
 	public T peek() {
 		return (this.getFirst());
 	}
 
+	/**
+	 * Add an element at the beginning of the list.
+	 * This function is same as addFirst()
+	 * @param element
+	 */
 	@Override
 	public void push(T e) {
 		this.addFirst(e);
 	}
 
+	/**
+	 * Removing the beginning of the list.
+	 * This function is same as removeFirst()
+	 * @return removed element
+	 */
 	@Override
 	public T pop() {
 		return (this.removeFirst());
@@ -315,6 +423,8 @@ public class LDLinkedList<T> extends AbstractList<T> implements Deque<T> {
 	 * Descending Iterator class.
 	 * It begins end of the linkedlist and ends begin of the linkedlist.
 	 * So next function is also previous function of the ListIterator class.
+	 * And hasNext function is also hasPrevious function of the ListIterator class.
+	 * @param <T>	: type of the element
 	 */
 	private class DescendingIterator implements Iterator<T> {
 		private final ListIterator<T>	iter = LDLinkedList.this.listIterator(length);
@@ -370,6 +480,12 @@ public class LDLinkedList<T> extends AbstractList<T> implements Deque<T> {
 		}
 	}
 
+	/**
+	 * Removing the first occurrence of the specified element from this list, if it is present.
+	 * This function is same as removeFirstOccurrence()
+	 * @param element
+	 * @return true if the removing is successful
+	 */
 	@Override
 	public boolean remove(Object o) {
 		return (this.removeFirstOccurrence(o));
@@ -378,7 +494,8 @@ public class LDLinkedList<T> extends AbstractList<T> implements Deque<T> {
 	/**
 	 * Replaces element to the specified position.
 	 * Ofcourse the element of the specified position is going to dissappear.
-	 * 
+	 * @param index
+	 * @param element
 	 * @return previous element at the specified position
 	 */
 	@Override
@@ -395,6 +512,8 @@ public class LDLinkedList<T> extends AbstractList<T> implements Deque<T> {
 
 	/**
 	 * Convert the linkedList to a conventional java array
+	 * 
+	 * @return Object array
 	 */
 	@Override
 	public Object[] toArray() {
@@ -412,6 +531,8 @@ public class LDLinkedList<T> extends AbstractList<T> implements Deque<T> {
 	/**
 	 * Convert this linkedlist to the array.
 	 * But u must give an array because of the type safety.
+	 * @param array to be converted
+	 * @return generic array
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
@@ -434,6 +555,11 @@ public class LDLinkedList<T> extends AbstractList<T> implements Deque<T> {
 		return (a);
 	}
 
+	/**
+	 * @param element : element to be searched
+	 * @return the index of the first occurrence of the specified element in this list,
+	 * or -1 if this list does not contain the element.
+	 */
 	@Override
 	public int indexOf(Object o) {
 		Node<T>	node = head;
@@ -448,6 +574,10 @@ public class LDLinkedList<T> extends AbstractList<T> implements Deque<T> {
 		return (index);
 	}
 
+	/**
+	 * @param element : element to be searched
+	 * @return true if this list contains the specified element.
+	 */
 	@Override
 	public boolean contains(Object o) {
 		if (this.indexOf(o) == -1)
@@ -455,6 +585,11 @@ public class LDLinkedList<T> extends AbstractList<T> implements Deque<T> {
 		return (true);
 	}
 
+	/**
+	 * @param element : element to be searched
+	 * @return the index of the last occurrence of the specified element in this list,
+	 * or -1 if this list does not contain the element.
+	 */
 	@Override
 	public int lastIndexOf(Object o) {
 		Node<T>	node = tail;
