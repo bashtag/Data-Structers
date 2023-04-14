@@ -119,7 +119,7 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
 
 	/**
 	 * Inserting a node using a recursive function.
-	 * O(logn)
+	 * O(logn) -> recursive function
 	 * @param element
 	 * @throws TreeInsertionException
 	 */
@@ -132,7 +132,7 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
 
 	/**
 	 * Inserting a node using recursion.
-	 * O(logn)
+	 * O(logn) -> searching this specified element
 	 * @param node
 	 * @param val
 	 * @throws TreeInsertionException
@@ -191,4 +191,115 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
 			sb.append("-> null\n");
 	}
 
+	/**
+	 * This method mainly calls a recursive function.
+	 * O(logn) -> recursive function
+	 * @param element
+	 */
+	public void	delete(E element) {
+		this.root = deleteRec(this.root, element);
+	}
+
+	/**
+	 * Recursive deletion method
+	 * O(logn) -> search for specified element
+	 * @param node
+	 * @param val
+	 */
+	public Node<E>	deleteRec(Node<E> node, E val) {
+		
+		/* base case */
+		if (node == null)
+			return (null);
+
+		/* Search */
+		if (val.compareTo(node.data) > 0)
+			node.right = deleteRec(node.right, val);
+		else if (val.compareTo(node.data) < 0)
+			node.left = deleteRec(node.left, val);
+
+		/* val == node.data */
+		else {
+			if (node.right == null)
+				return (node.left);
+			else if (node.left == null)
+				return (node.right);
+
+			/**
+			 * Otherwise.
+			 * Successor: minimum value of right subtree
+			 */
+			node.data = minValue(node.right);
+
+			/* to delete successor in the right subtree. */
+			node.right = deleteRec(node.right, node.data);
+		}
+
+		return (node);
+	}
+
+	/**
+	 * Get minimum value of given search tree
+	 * O(logn) -> bst search algorithm
+	 * @param node
+	 * @return
+	 */
+	public E	minValue(Node<E> node) {
+		if (node.left == null)
+			return (node.data);
+		return (minValue(node.left));
+	}
+
+	/**
+	 * Serialize bst with pre-order traversal.
+	 * Null marker: #
+	 * @return
+	 */
+	public String	serialize() {
+		StringBuilder	stringBuilder = new StringBuilder();
+		recSerialize(root, stringBuilder);
+		return (stringBuilder.toString());
+	}
+
+	/**
+	 * Helper method to serialize recursively.
+	 * O(n) -> Visit all the nodes
+	 */
+	protected void	recSerialize(Node<E> node, StringBuilder sb) {
+		if (node == null)
+			sb.append("# ");
+		else {
+			sb.append(node.data + " ");
+			recSerialize(node.left, sb);
+			recSerialize(node.right, sb);
+		}
+	}
+
+	/**
+	 * Deserialize given string to the Integer typed bst.
+	 * @param serialized
+	 */
+	public static BinarySearchTree<Integer>	deserialize(String serialized) {
+		String[]	preOrderArr = serialized.split(" ");
+
+		return (new BinarySearchTree<Integer>(recDeserialize(preOrderArr, 0)));
+	}
+
+	/**
+	 * not finished!!!
+	 * @param arr
+	 * @param index
+	 * @return
+	 */
+	protected static Node<Integer>	recDeserialize(String[] arr, int index) {
+		/* base case */
+		if (arr[index].equals("#"))
+			return (null);
+
+		Node<Integer>	newNode = new Node<Integer>(Integer.parseInt(arr[index]));
+		newNode.right = recDeserialize(arr, ++index);
+		newNode.left = recDeserialize(arr, ++index);
+
+		return (newNode);
+	}
 }
