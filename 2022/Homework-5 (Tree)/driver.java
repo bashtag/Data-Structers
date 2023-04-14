@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 public class driver {
 	
 	public static void main(String[] args) throws Exception {
@@ -15,5 +17,20 @@ public class driver {
 		bst0.insert(13);
 
 		System.out.println(bst0);
+		System.out.println("---------------------------------");
+		
+		bst0.delete(10);
+		System.out.println(bst0);
+		System.out.println("---------------------------------");
+		bst0.delete(100);
+		System.out.println(bst0);
+
+		String myst = bst0.serialize();
+		String[] arr = myst.split(" ");
+		System.out.println(Arrays.toString(arr));
+		System.out.println("----------DES_PART----------------");
+
+		BinarySearchTree<Integer>	deserialize = BinarySearchTree.deserialize(myst);
+		System.out.println(deserialize);
 	}
 }
