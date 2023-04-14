@@ -4,6 +4,7 @@
  * Search: O(logn)
  * Insertion: O(logn)
  * Deletion: O(logn)
+ * Serialization: O(n)
  */
 public class BinarySearchTree<E extends Comparable<? super E>> {
 
@@ -140,15 +141,19 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
 	protected void	insertRec(Node<E> node, E val) throws TreeInsertionException {
 		if (val.compareTo(node.data) > 0)
 		{
-			if (node.right == null)
+			if (node.right == null) {
 				node.right = new Node<E>(val);
+				node.right.parent = node;
+			}
 			else
 				insertRec(node.right, val);
 		}
 		else if (val.compareTo(node.data) < 0)
 		{
-			if (node.left == null)
+			if (node.left == null) {
 				node.left = new Node<E>(val);
+				node.left.parent = node;
+			}
 			else
 				insertRec(node.left, val);
 		}
@@ -263,7 +268,7 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
 
 	/**
 	 * Helper method to serialize recursively.
-	 * O(n) -> Visit all the nodes
+	 * O(n) -> Visit all nodes
 	 */
 	protected void	recSerialize(Node<E> node, StringBuilder sb) {
 		if (node == null)
@@ -282,23 +287,27 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
 	public static BinarySearchTree<Integer>	deserialize(String serialized) {
 		String[]	preOrderArr = serialized.split(" ");
 
-		return (new BinarySearchTree<Integer>(recDeserialize(preOrderArr, 0)));
+		return (new BinarySearchTree<Integer>(recDeserialize(preOrderArr, new int[]{0})));
 	}
 
 	/**
-	 * not finished!!!
+	 * Helper method to deserialize recursively.
+	 * O(n) -> Visit all nodes.
 	 * @param arr
-	 * @param index
-	 * @return
+	 * @param index array parameter because of reference. I have to use a global variable or reference parameter.
+	 * I chose to use a reference parameter.
+	 * @return root
 	 */
-	protected static Node<Integer>	recDeserialize(String[] arr, int index) {
+	protected static Node<Integer>	recDeserialize(String[] arr, int[] index) {
 		/* base case */
-		if (arr[index].equals("#"))
+		if (arr[index[0]].equals("#"))
 			return (null);
 
-		Node<Integer>	newNode = new Node<Integer>(Integer.parseInt(arr[index]));
-		newNode.right = recDeserialize(arr, ++index);
-		newNode.left = recDeserialize(arr, ++index);
+		Node<Integer>	newNode = new Node<Integer>(Integer.parseInt(arr[index[0]]));
+		++index[0];
+		newNode.left = recDeserialize(arr, index);
+		++index[0];
+		newNode.right = recDeserialize(arr, index);
 
 		return (newNode);
 	}
