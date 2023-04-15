@@ -1,6 +1,7 @@
 /**
  * BinarySearchTree implementation. It must be takes a comparable class.
  * Each node holds a unique key.
+ * Also this class is serialize. And deserialize for Integer datas.
  * Search: O(logn)
  * Insertion: O(logn)
  * Deletion: O(logn)
@@ -8,6 +9,7 @@
  */
 public class BinarySearchTree<E extends Comparable<? super E>> {
 
+	/* root's node */
 	protected Node<E>	root;
 
 	/**
@@ -311,4 +313,149 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
 
 		return (newNode);
 	}
+
+	/* QUESTIONS' PART */
+
+	/**
+	 * Question-a: Calculate total depth of the nodes.
+	 * Root's depth is 1.
+	 * O(n) -> to visit all of the nodes
+	 * @return total depth of all nodes
+	 */
+	public int	totalDepth() {
+		return (recTotalDepth(this.root, 1));
+	}
+
+	/**
+	 * Recursively total depth solution.
+	 * O(n) -> to visit all of the nodes
+	 * @param node
+	 * @return total depth
+	 */
+	protected int	recTotalDepth(Node<E> node, int depth) {
+		/* base case */
+		if (node == null)
+			return (0);
+		
+		return (depth + recTotalDepth(node.left, depth + 1) + recTotalDepth(node.right, depth + 1));
+	}
+
+	/**
+	 * Question-b: Calculate average comparision number
+	 * O(logn) -> recursive function
+	 * @param element
+	 * @param comparisionNumber reference
+	 * @return if bst contains this element or not
+	 */
+	public boolean	contains(E element, int[] comparisionNumber) {
+		return (recContains(this.root, element, comparisionNumber));
+	}
+
+	/**
+	 * this function checks bst includes given element or not.
+	 * O(logn) -> bst searching
+	 * @param node
+	 * @param element
+	 * @param comparisionNumber : reference
+	 * @return
+	 */
+	protected boolean	recContains(Node<E> node, E element, int[] comparisionNumber) {
+		++comparisionNumber[0];
+		if (node == null)
+			return (false);
+
+		if (element.compareTo(node.data) > 0)
+			return (recContains(node.right, element, comparisionNumber));
+
+		if (element.compareTo(node.data) < 0)
+			return (recContains(node.left, element, comparisionNumber));
+
+		return (true);
+	}
+
+	/**
+	 * it creates a full bst
+	 * O(nlogn) -> recursive function
+	 * @param end until this value
+	 * @return
+	 */
+	public static	BinarySearchTree<Integer>	createFullBST(int end) {
+		return (new BinarySearchTree<>(recCreateFullBST(0, end)));
+	}
+
+	/**
+	 * Recursively Integer typed full bst create function.
+	 * O(nlogn) ->
+	 * 	1: Searching place -> logn.
+	 *  2: All elements -> n.
+	 * These operations are inner. So we must multiply them. O(nlogn)
+	 * @param start
+	 * @param end
+	 * @return
+	 */
+	protected static Node<Integer>	recCreateFullBST(int start, int end) {
+		if (start > end)
+			return (null);
+
+		int	mid = (start + end) / 2;
+		Node<Integer>	node = new Node<Integer>(mid);
+
+		node.left = recCreateFullBST(start, mid - 1);
+		node.right = recCreateFullBST(mid + 1, end);
+
+		return (node);
+	}
+
+	/**
+	 * Calculate the number of the internal nodes
+	 * O(n) -> recursive function
+	 * @return number of the internal nodes
+	 */
+	public int	calcInternals() {
+		return (recCalcInternals(this.root));
+	}
+
+	/**
+	 * Recursively calculate the total number of the internal nodes
+	 * O(n) -> to visit all of the nodes
+	 * @param node
+	 * @return
+	 */
+	protected int	recCalcInternals(Node<E> node) {
+		/* base case */
+		if (node == null)
+			return (0);
+
+		/* leaf */
+		if (node.left == null && node.right == null)
+			return (0);
+		return (1 + recCalcInternals(node.left) + recCalcInternals(node.right));
+	}
+	
+	/**
+	 * Calculate the number of leaves
+	 * O(n) -> recursive function
+	 * @return nmber of internal nodes
+	 */
+	public int	calcLeaves() {
+		return (recCalcLeaves(this.root));
+	}
+	
+	/**
+	 * Recursively calculate the number of leaves
+	 * O(n) -> Visit all nodes
+	 * @param node
+	 * @return
+	 */
+	protected int	recCalcLeaves(Node<E> node) {
+		/* base case */
+		if (node == null)
+			return (0);
+
+		/* leaf */
+		if (node.left == null && node.right == null)
+			return (1);
+		return (recCalcInternals(node.left) + recCalcInternals(node.right));
+	}
+
 }
