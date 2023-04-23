@@ -44,7 +44,7 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
 		 */
 		@Override
 		public int compareTo(E o) {
-			return (o.compareTo(data));
+			return (data.compareTo(o));
 		}
 	}
 
