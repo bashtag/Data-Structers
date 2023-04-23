@@ -3,7 +3,30 @@ import java.util.Arrays;
 public class driver {
 	
 	public static void main(String[] args) throws Exception {
-		testBst();
+		// testBst();
+		// testBinHeap();
+	}
+
+	private static void	testBinHeap() {
+		BinaryHeap<Integer>	hehe = new BinaryHeap<>(12);
+		hehe.insertKey(40);
+		hehe.insertKey(10);
+		hehe.insertKey(40);
+		hehe.insertKey(15);
+		hehe.insertKey(50);
+		hehe.insertKey(100);
+		hehe.insertKey(30);
+		System.out.println(hehe);
+		System.out.println("---------------------");
+		BinaryHeap<Integer>	abo = new BinaryHeap<>(5);
+		abo.insertKey(30);
+		abo.insertKey(20);
+		abo.insertKey(100);
+		abo.insertKey(10);
+		System.out.println(abo);
+		System.out.println("---------merge_part--------");
+		hehe.merge(abo);
+		System.out.println(hehe);
 	}
 	
 	/**
