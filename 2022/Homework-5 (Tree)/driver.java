@@ -3,8 +3,50 @@ import java.util.Arrays;
 public class driver {
 	
 	public static void main(String[] args) throws Exception {
+		testBsArr();
 		// testBst();
 		// testBinHeap();
+	}
+
+	private static void	testBsArr() throws Exception {
+		BinarySearchArray<Integer>	bsa0 = new BinarySearchArray<Integer>(Integer.class, 10);
+		bsa0.insert(5);
+		bsa0.insert(10);
+		bsa0.insert(20);
+		bsa0.insert(3);
+		bsa0.insert(2);
+		bsa0.insert(13);
+		bsa0.insert(14);
+		bsa0.insert(31);
+		bsa0.insert(9);
+		// bsa0.insert(5);
+		bsa0.insert(15);
+		bsa0.insert(29);
+		bsa0.insert(18);
+		// bsa0.insert(3);
+		bsa0.insert(-5);
+		// bsa0.insert(10);
+		// bsa0.insert(9);
+		bsa0.insert(6);
+		// bsa0.insert(13);
+	
+		System.out.println(bsa0);
+		System.out.println("---------------------------------");
+		
+		bsa0.delete(10);
+		System.out.println(bsa0);
+		System.out.println("---------------------------------");
+		bsa0.delete(100);
+		System.out.println(bsa0);
+		System.out.println(bsa0.contains(15));
+
+		String myst = bsa0.serialize();
+		String[] arr = myst.split(" ");
+		System.out.println(Arrays.toString(arr));
+		System.out.println("----------DES_PART----------------");
+	
+		BinarySearchTree<Integer>	deserialize = BinarySearchTree.deserialize(myst);
+		System.out.println(deserialize);
 	}
 
 	private static void	testBinHeap() {
