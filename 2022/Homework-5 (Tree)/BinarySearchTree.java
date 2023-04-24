@@ -213,7 +213,7 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
 	 * @param node
 	 * @param val
 	 */
-	public Node<E>	deleteRec(Node<E> node, E val) {
+	protected Node<E>	deleteRec(Node<E> node, E val) {
 		
 		/* base case */
 		if (node == null)
@@ -458,4 +458,5 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
 		return (recCalcInternals(node.left) + recCalcInternals(node.right));
 	}
 
+	
 }
