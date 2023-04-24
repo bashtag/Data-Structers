@@ -2,7 +2,8 @@
  * This heap is regulated as minheap. Also this class is structurally provides a node-link structure.
  * Big difference with bst is heap is a complete tree, bst not.
  * Avl tree is a complete tree but heap is not provide binary search
- * 
+ * Insertion: O(logn)
+ * Merge: O((n^2)logn)
  */
 public class BinaryHeap<E extends Comparable<? super E>> extends BinarySearchTree<E> {
 	// max size of the heap
