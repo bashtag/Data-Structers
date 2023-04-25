@@ -3,9 +3,12 @@ import java.util.Arrays;
 public class driver {
 	
 	public static void main(String[] args) throws Exception {
+		System.out.println("**************BSA TEST PART*************");
 		testBsArr();
-		// testBst();
-		// testBinHeap();
+		System.out.println("**************BST TEST PART*************");
+		testBst();
+		System.out.println("**************BINHEAP TEST PART*************");
+		testBinHeap();
 	}
 
 	private static void	testBsArr() throws Exception {
@@ -45,7 +48,7 @@ public class driver {
 		System.out.println(Arrays.toString(arr));
 		System.out.println("----------DES_PART----------------");
 	
-		BinarySearchTree<Integer>	deserialize = BinarySearchTree.deserialize(myst);
+		BinarySearchTree<Integer>	deserialize = BinarySearchArray.deserialize(myst);
 		System.out.println(deserialize);
 	}
 
@@ -126,7 +129,6 @@ public class driver {
 		System.out.println("For a bst with 8192 elements:" +
 						"\nNumber of internal nodes: " + q1b.calcInternals() +
 						"\nNumber of leaf nodes: " + q1b.calcLeaves());
-
 	}
 
 	/**
