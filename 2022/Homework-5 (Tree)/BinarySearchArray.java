@@ -269,7 +269,7 @@ public class BinarySearchArray<E extends Comparable<? super E>> extends BinarySe
 		Integer[]	arr = new Integer[capacity];
 		
 		for (int i = 0; i < capacity; ++i)
-			if (serArr[i] != "#")
+			if (!serArr[i].equals("#"))
 				arr[i] = Integer.parseInt(serArr[i]);
 
 		try {
