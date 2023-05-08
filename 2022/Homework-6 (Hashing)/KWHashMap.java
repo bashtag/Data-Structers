@@ -1,5 +1,5 @@
 /**
- * V is comparable cause of binary search tree
+ * K is comparable cause of binary search tree
  */
 public interface	KWHashMap<K extends Comparable<? super K>, V> {
 
