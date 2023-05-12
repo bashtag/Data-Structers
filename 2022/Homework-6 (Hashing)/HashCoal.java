@@ -1,5 +1,3 @@
-import javax.management.RuntimeErrorException;
-
 public class HashCoal<K extends Comparable<? super K>, V> implements KWHashMap<K, V> {
 	
 	/**
@@ -124,11 +122,18 @@ public class HashCoal<K extends Comparable<? super K>, V> implements KWHashMap<K
 		K	kKey = (K) key;
 
 		hashKey = this.hash(kKey, 0);
-		for (int i = 0; i < this.capacity && this.table[hashKey].nextIndex != -1; ++i) {
-			hashKey = this.table[hashKey].nextIndex;
+		for (int i = 0; i < this.capacity; ++i) {
+			if (this.table[hashKey] == null)
+				return (null);
+			else if (this.table[hashKey].key == kKey)
+				return (this.table[hashKey].value);
+			else if (this.table[hashKey].nextIndex != -1)
+				hashKey = this.table[hashKey].nextIndex;
+			else
+				return (null);
 		}
 
-		return (this.table[hashKey].value);
+		return (null);
 	}
 
 	/**
@@ -149,10 +154,17 @@ public class HashCoal<K extends Comparable<? super K>, V> implements KWHashMap<K
 	public V put(K key, V value) {
 		int	hashKey;
 
+		if (this.loadFactor >= this.THRESHOLD)
+			this.reallocate();
+
 		hashKey = this.hash(key, 0);
 		for (int i = 0; i < this.capacity;) {
 			if (this.table[hashKey] != null) {
-				if (this.table[hashKey].nextIndex == -1) {
+				if (this.table[hashKey].key == key) {
+					this.table[hashKey].value = value;
+					break;
+				}
+				else if (this.table[hashKey].nextIndex == -1) {
 					this.table[hashKey].nextIndex = this.hash(key, ++i);
 					hashKey = this.table[hashKey].nextIndex;
 				}
@@ -179,22 +191,93 @@ public class HashCoal<K extends Comparable<? super K>, V> implements KWHashMap<K
 		this.loadFactor = this.tableSize / (double)this.capacity;
 	}
 
+	/**
+	 * Reallocate table.
+	 * Doubles the capacity
+	 * O(n) -> to move elements
+	 */
+	@SuppressWarnings("unchecked")
+	private void	reallocate() {
+		Node<K,V>[]	newTable = new Node[this.capacity * 2];
+
+		for (int i = 0; i < this.capacity; ++i)
+			newTable[i] = this.table[i];
+
+		this.table = newTable;
+		this.capacity *= 2;
+		this.updateLoadFactor();
+	}
+
+	/**
+	 * Remove function for hashmap
+	 * Used a recursive function
+	 * the worst case O(n^2) caused by shifting
+	 * the best case O(1)
+	 * @param key : key of the element to be deleted
+	 * @return Value of removing element
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public V remove(Object key) {
-		int	hashKey;
 		K	kKey = (K) key;
-
-		hashKey = this.hash(kKey, 0);
-		for (int i = 0; i < this.capacity && !this.table[hashKey].key.equals(kKey); ++i) {
-
-		}
-
-		throw	new RuntimeException();
+		return (recRemove(kKey, this.hash(kKey, 0), 0));
 	}
 
+	/**
+	 * Recursive removing method
+	 * @param key : key of the element to be deleted
+	 * @param hashKey : result of the 0 probe hash method
+	 * @return Value of removing element
+	 */
+	private V	recRemove(K key, int hashKey, int probe) {
+
+		for (int i = 0; i < this.capacity; ++i) {
+			if (this.table[hashKey] == null)
+				return (null);
+			else if (this.table[hashKey].key == key) {
+				V	retV = this.table[hashKey].value;
+				if (this.table[hashKey].nextIndex == -1) {
+					this.table[hashKey] = null;
+				}
+				else {
+					int nextHash = this.table[hashKey].nextIndex;
+					this.table[hashKey] = this.table[nextHash];
+					recRemove(this.table[nextHash].key, nextHash, probe + 1);
+				}
+				return (retV);
+			}
+			else if (this.table[hashKey].nextIndex == -1)
+				return (null);
+			else
+				hashKey = this.table[hashKey].nextIndex;
+		}
+
+		return (null);
+	}
+
+	/**
+	 * @return size of the map
+	 */
 	@Override
 	public int size() {
 		return (this.tableSize);
+	}
+
+	/**
+	 * to print hashmap
+	 * @return string converted from a StringBuilder
+	 */
+	@Override
+	public String	toString() {
+		StringBuilder	sb = new StringBuilder();
+		
+		sb.append("HashValue\tKey\tNext\n");
+		for (int i = 0; i < this.capacity; ++i) {
+			if (this.table[i] != null)
+				sb.append(i + "\t" + this.table[i].key + "\t" + this.table[i].nextIndex + "\n");
+			else
+				sb.append(i + "\n");
+		}
+		return (sb.toString());
 	}
 }
