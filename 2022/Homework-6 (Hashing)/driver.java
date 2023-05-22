@@ -1,3 +1,6 @@
+import java.util.Arrays;
+import java.util.Random;
+
 public class driver {
 	public static void main(String[] args) {
 		long	nanotime = System.nanoTime();
@@ -7,6 +10,106 @@ public class driver {
 		testHashCoal();
 
 		System.out.println("Compilation time: " + ((System.nanoTime() - nanotime) / 1000000.0) + " ms");
+
+		Integer[] small, medium, large, sc, mc, lc, sn, mn, ln;
+		small = generateArr(100);
+		medium = generateArr(1000);
+		large = generateArr(10000);
+		sc = Arrays.copyOf(small, small.length);
+		sn = Arrays.copyOf(small, small.length);
+		mc = Arrays.copyOf(medium, medium.length);
+		mn = Arrays.copyOf(medium, medium.length);
+		lc = Arrays.copyOf(large, large.length);
+		ln = Arrays.copyOf(large, large.length);
+		Sorting.<Integer>mergeSort(Integer.class, small);
+
+		testMergeSort(small, medium, large);
+		testQuickSort(sc, mc, lc);
+		testNewSort(sn, mn);
+
+		System.out.println("Small (Merge Sort): " + isSorted(small));
+		System.out.println("Small (Quick Sort): " + isSorted(sc));
+		System.out.println("Small (Quick Sort): " + isSorted(sn));
+		System.out.println("Medium (Merge Sort): " + isSorted(medium));
+		System.out.println("Medium (Quick Sort): " + isSorted(mc));
+		System.out.println("Medium (Quick Sort): " + isSorted(mn));
+		System.out.println("Large (Merge Sort): " + isSorted(large));
+		System.out.println("Large (Quick Sort): " + isSorted(lc));
+
+	}
+
+	public static boolean	isSorted(Integer[] arr) {
+		for (int i = 0; i + 1 < arr.length; ++i)
+			if (arr[i].compareTo(arr[i + 1]) > 0)
+				return (false);
+		return (true);
+	}
+
+	public static void	printArr(Integer[] arr) {
+		System.out.print('[');
+		for (int i = 0; i < arr.length; ++i)
+			System.out.print(arr[i] + ", ");
+		System.out.println(']');
+	}
+
+	public static Integer[]	generateArr(int size) {
+		Integer[]	arr = new Integer[size];
+		Random	rand = new Random();
+
+		for (int i = 0; i < size; ++i)
+			arr[i] = rand.nextInt(size);
+
+		return (arr);
+	}
+
+	public static void	testMergeSort(Integer[] small, Integer[] medium, Integer[] large) {
+		long	nanoTime = System.nanoTime();
+
+		Sorting.<Integer>mergeSort(Integer.class, small);
+
+		System.out.println("Merge Sort Compilation time (small): " + ((System.nanoTime() - nanoTime) / 1000000.0) + " ms");
+		nanoTime = System.nanoTime();
+
+		Sorting.<Integer>mergeSort(Integer.class, medium);
+
+		System.out.println("Merge Sort Compilation time (medium): " + ((System.nanoTime() - nanoTime) / 1000000.0) + " ms");
+		nanoTime = System.nanoTime();
+
+		Sorting.<Integer>mergeSort(Integer.class, large);
+
+		System.out.println("Merge Sort Compilation time (large): " + ((System.nanoTime() - nanoTime) / 1000000.0) + " ms");
+	}
+
+	public static void	testQuickSort(Integer[] small, Integer[] medium, Integer[] large) {
+		long	nanoTime = System.nanoTime();
+
+		Sorting.<Integer>quickSort(small);
+
+		System.out.println("Quick Sort Compilation time (small): " + ((System.nanoTime() - nanoTime) / 1000000.0) + " ms");
+		nanoTime = System.nanoTime();
+
+		Sorting.<Integer>quickSort(medium);
+
+		System.out.println("Quick Sort Compilation time (medium): " + ((System.nanoTime() - nanoTime) / 1000000.0) + " ms");
+		nanoTime = System.nanoTime();
+
+		Sorting.<Integer>quickSort(large);
+
+		System.out.println("Quick Sort Compilation time (large): " + ((System.nanoTime() - nanoTime) / 1000000.0) + " ms");
+	}
+
+	public static void	testNewSort(Integer[] small, Integer[] medium) {
+		long	nanoTime = System.nanoTime();
+
+		Sorting.<Integer>newSort(small);
+
+		System.out.println("New Sort Compilation time (small): " + ((System.nanoTime() - nanoTime) / 1000000.0) + " ms");
+		nanoTime = System.nanoTime();
+
+		Sorting.<Integer>newSort(medium);
+
+		System.out.println("New Sort Compilation time (medium): " + ((System.nanoTime() - nanoTime) / 1000000.0) + " ms");
+		nanoTime = System.nanoTime();
 	}
 
 	public static void	testHashCoal() {
