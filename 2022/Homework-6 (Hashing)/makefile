@@ -7,7 +7,7 @@ clear:
 	@clear
 
 compile:
-	@javac *.java -Xlint:unchecked
+	@javac *.java -Xlint:unchecked -Xdiags:verbose
 
 run:
 	@java driver
