@@ -4,10 +4,9 @@ public class AVLTree<T extends Comparable<T>> extends BinarySearchTree<T> {
 	 * Node class for avl nodes
 	 */
 	private static class	AVLNode<T> extends Node<T> {
-		/* CONSTANTS */
 
-		/* balance factor for each node */
-		private int	height = 0;
+		/* height of node */
+		private int	height = 1;
 
 		/* links */
 		private AVLNode<T>	right = null;
@@ -23,11 +22,11 @@ public class AVLTree<T extends Comparable<T>> extends BinarySearchTree<T> {
 	}
 
 	/* constants */
-	private final int	LEFT_HEAVY = -1;
-	private final int	BALANCED = 0;
-	private final int	RIGHT_HEAVY = 1;
+	private final int	LEFT_HEAVY = 1;
+	private final int	RIGHT_HEAVY = -1;
 
 	private boolean	addRes = false;
+	private AVLNode<T>	head = null;
 
 
 	/**
@@ -35,7 +34,7 @@ public class AVLTree<T extends Comparable<T>> extends BinarySearchTree<T> {
 	 * @param bst
 	 */
 	public	AVLTree(BinarySearchTree<T> bst) {
-		this.head = bst.head;
+		this.head = (AVLNode<T>)bst.head;
 	}
 
 	/**
@@ -43,18 +42,24 @@ public class AVLTree<T extends Comparable<T>> extends BinarySearchTree<T> {
 	 */
 	public	AVLTree() {}
 
+	private int	getHeight(AVLNode<T> node) {
+		if (node == null)
+			return (0);
+		return (node.height);
+	}
 	/**
 	 * Insertion method for AVL Tree.
 	 * Rotations are included
 	 */
-	public boolean	add(T item) {
-		this.head = recAdd(this.head, item);
-		return (this.addRes);
+	public boolean	add(T item) {		
+		this.head = this.recAdd(this.head, item);
+		// System.out.println("head: " + this.head);
+		return (true);
 	}
 
 	private AVLNode<T>	recAdd(AVLNode<T> node, T item) {
 		if (node == null)
-			return (null);
+			return (new AVLNode<>(item));
 		
 		if (item.compareTo(node.data) > 0)
 			node.right = recAdd(node.right, item);
@@ -65,11 +70,37 @@ public class AVLTree<T extends Comparable<T>> extends BinarySearchTree<T> {
 			return (node);
 		}
 
-		node.height = 1 + Math.max(node.left.height, node.right.height);
+		node.height = 1 + Math.max(this.getHeight(node.left), this.getHeight(node.right));
 
 		int	balance = this.getBalance(node);
+		// System.out.println(node + ", " + node.height + ", balance: " + balance + ", " + (item.compareTo(node.right.data) > 0));
+		/**
+		 * If balance factor is greater than 1, it means that left rotation should be used.
+		 * Also if the item is on the left of the node.left than another left rotation should be used.
+		 */
+		/* LL Case */
+		if (balance > LEFT_HEAVY && item.compareTo(node.left.data) < 0)
+			return (rotateR(node));
 
-		if (true);
+		/* LR Case */
+		else if (balance > LEFT_HEAVY && item.compareTo(node.left.data) > 0) {
+			/* first L rotate should be used because if R rotate is desired, it needs to be done */
+			node.left = rotateL(node.left);
+			return (rotateR(node));
+		}
+
+		/* RL Case */
+		else if (balance < RIGHT_HEAVY && item.compareTo(node.right.data) < 0) {
+			node.right = rotateR(node.right);
+			return (rotateL(node));
+		}
+
+		/* RR Case */
+		else if (balance < RIGHT_HEAVY && item.compareTo(node.right.data) > 0)
+			return (rotateL(node));
+
+		/* return the unchanged node */
+		return (node);
 	}
 
 	/**
@@ -81,9 +112,7 @@ public class AVLTree<T extends Comparable<T>> extends BinarySearchTree<T> {
 		if (node == null)
 			return (0);
 
-		int	leftH = node.left != null ? node.left.height : 0;
-		int	rightH = node.right != null ? node.right.height : 0;
-		return (leftH - rightH);
+		return (this.getHeight(node.left) - this.getHeight(node.right));
 	}
 
 	/**
@@ -98,10 +127,10 @@ public class AVLTree<T extends Comparable<T>> extends BinarySearchTree<T> {
 		middle.right = node;
 		node.left = middleRight;
 
-		node.height = 1 + Math.max(node.left.height, node.right.height);
-		middle.height = 1 + Math.max(node.left.height, node.right.height);
+		node.height = 1 + Math.max(this.getHeight(node.left), this.getHeight(node.right));
+		middle.height = 1 + Math.max(this.getHeight(node.left), this.getHeight(node.right));
 
-		return (node);
+		return (middle);
 	}
 
 	/**
@@ -117,10 +146,10 @@ public class AVLTree<T extends Comparable<T>> extends BinarySearchTree<T> {
 		middle.left = node;
 		node.right = middleLeft;
 
-		node.height = 1 + Math.max(node.left.height, node.right.height);
-		middle.height = 1 + Math.max(node.left.height, node.right.height);
+		node.height = 1 + Math.max(this.getHeight(node.left), this.getHeight(node.right));
+		middle.height = 1 + Math.max(this.getHeight(node.left), this.getHeight(node.right));
 
-		return (node);
+		return (middle);
 	}
 
 	
@@ -128,5 +157,37 @@ public class AVLTree<T extends Comparable<T>> extends BinarySearchTree<T> {
 		throw	new UnsupportedOperationException();
 	}
 
+	
+	/**
+	 * toString method overload.
+	 * It makes a diagram of the bs.
+	 * @return a String that has been made using StringBuilder
+	 */
+	public String	toString() {
+		StringBuilder	sb = new StringBuilder();
+		this.preOrderToString(this.head, sb, 0);
+		return (sb.toString());
+	}
 
+	/**
+	 * Recursive method that creates a diagram of the bs
+	 * @param node
+	 * @param sb
+	 * @param depth
+	 */
+	private void	preOrderToString(AVLNode<T> node, StringBuilder sb, int depth) {
+		for (int i = 0; i < depth; ++i)
+			sb.append('\t');
+
+		if (node != null)
+		{
+			sb.append("-> " + node.data + "\n");
+			if (node.right != null || node.left != null) {
+				preOrderToString(node.left, sb, depth + 1);
+				preOrderToString(node.right, sb, depth + 1);
+			}
+		}
+		else
+			sb.append("-> null\n");
+	}
 }
