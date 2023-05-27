@@ -2,7 +2,22 @@ import java.util.Arrays;
 public class Driver {
 
 	public static void main(String[] args) {
-		testArrayToBST();
+		// testArrayToBST();
+		testAVLTree();
+	}
+
+	@SuppressWarnings("unchecked")
+	public static void	testAVLTree() {
+		AVLTree	avl = new AVLTree();
+		
+		avl.add(10);
+		avl.add(20);
+		avl.add(30);
+		avl.add(40);
+		avl.add(50);
+		avl.add(25);
+		
+		System.out.println(avl);
 	}
 
 	/**
