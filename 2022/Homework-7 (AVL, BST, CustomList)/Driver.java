@@ -3,13 +3,15 @@ public class Driver {
 
 	public static void main(String[] args) {
 		// testArrayToBST();
-		testAVLTree();
+		// testAVLTree();
 	}
 
 	@SuppressWarnings("unchecked")
 	public static void	testAVLTree() {
 		AVLTree	avl = new AVLTree();
 		
+		/* test - insertion */
+		System.out.println("-----------INSERTION PART-------------");
 		avl.add(10);
 		avl.add(20);
 		avl.add(30);
@@ -18,6 +20,46 @@ public class Driver {
 		avl.add(25);
 		
 		System.out.println(avl);
+
+		/* test - deletion */
+		System.out.println("-----------DELETION PART-------------");
+
+		avl = new AVLTree<>();
+
+		avl.add(9);
+		avl.add(5);
+		avl.add(10);
+		avl.add(0);
+		avl.add(6);
+		avl.add(11);
+		avl.add(-1);
+		avl.add(1);
+		avl.add(2);
+
+		System.out.println("before deletion: \n" + avl);
+		avl.delete(10);
+		System.out.println("after deletion: \n" + avl);
+
+		/* test - bst to avl */
+		System.out.println("-----------BST TO AVL PART-------------");
+		BinaryTree tree2 = new BinaryTree();
+		BinarySearchTree BST2 = new BinarySearchTree();
+		
+		tree2.head = new BinaryTree.Node<>(3);
+		tree2.head.left = new BinaryTree.Node<>(3);
+		tree2.head.right = new BinaryTree.Node<>(3);
+		tree2.head.right.right = new BinaryTree.Node<>(3);
+		tree2.head.right.right.right = new BinaryTree.Node<>(3);
+		tree2.head.right.right.right.left = new BinaryTree.Node<>(3);
+
+		Comparable [] array2 = {1,2,3,4,5,6};
+
+		BST2 = arrayToBST(tree2,array2);
+
+		/* ------------------------- */
+		avl = new AVLTree<>(BST2);
+		System.out.println("BST: \n" + BST2);
+		System.out.println("AVL: \n" + avl);
 	}
 
 	/**
