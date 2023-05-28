@@ -1,6 +1,6 @@
 public class BinarySearchTree<T extends Comparable<T>> extends BinaryTree<T>{
 
-	private T	delRes = null;
+	protected T	delRes = null;
 
 	public	BinarySearchTree() {}
 
@@ -109,7 +109,8 @@ public class BinarySearchTree<T extends Comparable<T>> extends BinaryTree<T>{
 		else if (compRes < 0)
 			return (recDelete(node.left, target));
 		else {
-			this.delRes = node.data;
+			if (this.delRes == null)
+				this.delRes = node.data;
 			if (node.left == null)
 				return (node.right);
 			else if (node.right == null)
@@ -117,8 +118,9 @@ public class BinarySearchTree<T extends Comparable<T>> extends BinaryTree<T>{
 
 			/* else */
 
-			node.data = this.maxFinder(node.left).data;
-			recDelete(node.left, node.data);
+			/* get the inorder successor */
+			node.data = this.minFinder(node.right).data;
+			node.right = recDelete(node.right, node.data);
 		}
 		return node;
 	}
@@ -128,10 +130,10 @@ public class BinarySearchTree<T extends Comparable<T>> extends BinaryTree<T>{
 	 * @param node
 	 * @return
 	 */
-	private Node<T>	maxFinder(Node<T> node) {
-		while (node.right != null)
-			node = node.right;
-		return (node.right);
+	private Node<T>	minFinder(Node<T> node) {
+		while (node.left != null)
+			node = node.left;
+		return (node.left);
 	}
 
 	/**
