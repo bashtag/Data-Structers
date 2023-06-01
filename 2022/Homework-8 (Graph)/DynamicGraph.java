@@ -1,7 +1,8 @@
 /**
  * For manipulating Graph
+ * T is type of properties of vertexes
  */
-public interface DynamicGraph extends Graph {
+public interface DynamicGraph<T> extends Graph<T> {
 	
 	/**
 	 * Generate a new vertex by given parameters.
@@ -9,22 +10,23 @@ public interface DynamicGraph extends Graph {
 	 * @param weight
 	 * @return the new vertex
 	 */
-	public Vertex	newVertex(String label, double weight);
+	public Vertex<T>	newVertex(String label, double weight);
 
 	/**
 	 * Add the given vertex to the graph
 	 * @param newVertex
 	 * @return insertion is successful or not
 	 */
-	public boolean	addVertex(Vertex newVertex);
+	public boolean	addVertex(Vertex<T> newVertex);
 
 	/**
 	 * Add an edge between the given two vertices in the graph.
 	 * @param vertexId1
 	 * @param verrtexId2
+	 * @param weight
 	 * @return insertion is successful or not
 	 */
-	public boolean	addEdge(int vertexId1, int verrtexId2);
+	public boolean	addEdge(int vertexId1, int vertexId2, double weight);
 
 	/**
 	 * Remove the edge between the given two vertices.
@@ -54,7 +56,7 @@ public interface DynamicGraph extends Graph {
 	 * @param filter
 	 * @return a subgraph of the graph
 	 */
-	public DynamicGraph	filterVertices(String key, String filter);
+	public DynamicGraph<T>	filterVertices(String key, String filter);
 
 	/**
 	 * Generate the adjacency matrix represantation of the graph
