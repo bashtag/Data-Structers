@@ -7,8 +7,10 @@ import	java.util.Iterator;
 	Each implementation of the Graph interface should
 	provide a constructor that specifies the number of
 	vertices and whether or not the graph is directed.
+ * 
+ * T is type of properties of vertexes
  */
-public interface Graph {
+public interface Graph<T> {
 	// Accessor Methods
 
 	/**
@@ -27,7 +29,7 @@ public interface Graph {
 	 * Insert a new edge into the graph
 	 * @param edge The new edge.
 	 */
-	public void	insert(Edge edge);
+	public void	insert(Edge<T> edge);
 
 	/**
 	 * Determine whether an edge exists.
@@ -35,7 +37,7 @@ public interface Graph {
 	 * @param dest The destination vertex
 	 * @return true if theere is an edge from source to dest
 	 */
-	public boolean	isEdge(int source, int dest);
+	public boolean	isEdge(Vertex<T> source, Vertex<T> dest);
 
 	/**
 	 * Get the edge between two vertices.
@@ -44,12 +46,12 @@ public interface Graph {
 	 * @return The Edge between these two vertices
 	 * or null if there is no edge.
 	 */
-	public Edge	getEdge(int source, int dest);
+	public Edge<T>	getEdge(Vertex<T> source, Vertex<T> dest);
 
 	/**
 	 * Return an iterator to the edges connected to a given vertex.
 	 * @param source The source vertex
 	 * @return An Iterator<Edge> to the vertices connected to source
 	 */
-	public Iterator<Edge>	edgeIterator(int source);
+	public Iterator<Edge<T>>	edgeIterator(int source);
 }
