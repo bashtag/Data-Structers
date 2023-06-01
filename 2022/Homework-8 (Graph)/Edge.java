@@ -1,11 +1,14 @@
-public class Edge implements Comparable<Edge> {
+/**
+ * T is the type of properties of vertexes
+ */
+public class Edge<T> implements Comparable<Edge<T>> {
 	/* defaults */
 	private static final double	DEFAULT_W = 1.0;
 
 	/* the destination vertex for an edge */
-	private Vertex	dest;
+	private Vertex<T>	dest;
 	/* the source vertex of an edge */
-	private Vertex	source;
+	private Vertex<T>	source;
 	/* the weight */
 	private double	weight;
 
@@ -16,7 +19,7 @@ public class Edge implements Comparable<Edge> {
 	 * @param source
 	 * @param dest
 	 */
-	public	Edge(Vertex source, Vertex dest) {
+	public	Edge(Vertex<T> source, Vertex<T> dest) {
 		this(source, dest, DEFAULT_W);
 	}
 
@@ -27,7 +30,7 @@ public class Edge implements Comparable<Edge> {
 	 * @param dest
 	 * @param w
 	 */
-	public	Edge(Vertex source, Vertex dest, double w) {
+	public	Edge(Vertex<T> source, Vertex<T> dest, double w) {
 		this.source = source;
 		this.dest = dest;
 		this.weight = w;
@@ -37,7 +40,7 @@ public class Edge implements Comparable<Edge> {
 	 * Get the destination vertex
 	 * @return the destination vertex
 	 */
-	public Vertex	getDest() {
+	public Vertex<T>	getDest() {
 		return (this.dest);
 	}
 
@@ -45,7 +48,7 @@ public class Edge implements Comparable<Edge> {
 	 * Get the source vertex
 	 * @return the source vertex
 	 */
-	public Vertex	getSources() {
+	public Vertex<T>	getSources() {
 		return (this.source);
 	}
 
@@ -62,7 +65,7 @@ public class Edge implements Comparable<Edge> {
 	 * @return > 0 if weight of this object is greater than given object's.
 	 */
 	@Override
-	public int compareTo(Edge o) {
+	public int compareTo(Edge<T> o) {
 		return (Double.compare(this.weight, o.weight));
 	}
 
@@ -71,9 +74,10 @@ public class Edge implements Comparable<Edge> {
 	 * @return if the edges source and destination vertices are the same.
 	 */
 	@Override
+	@SuppressWarnings("unchecked")
 	public boolean equals(Object obj) {
 		if (obj instanceof Edge) {
-			Edge	edge = (Edge) obj;
+			Edge<T>	edge = (Edge<T>) obj;
 			if (this.dest == edge.dest && this.source == edge.source)
 				return (true);
 		}
