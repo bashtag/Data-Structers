@@ -48,7 +48,7 @@ public class Edge<T> implements Comparable<Edge<T>> {
 	 * Get the source vertex
 	 * @return the source vertex
 	 */
-	public Vertex<T>	getSources() {
+	public Vertex<T>	getSource() {
 		return (this.source);
 	}
 
