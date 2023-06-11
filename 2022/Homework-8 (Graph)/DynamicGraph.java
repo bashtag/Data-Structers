@@ -51,12 +51,19 @@ public interface DynamicGraph<T> extends Graph<T> {
 	public boolean	removeVertex(String label);
 
 	/**
+	 * Is given index on the graph or not
+	 * @param vertex
+	 * @return is vertex find
+	 */
+	public boolean	containsVertex(Vertex<T> vertex);
+
+	/**
 	 * Filter the vertices by the given property
 	 * @param key
 	 * @param filter
 	 * @return a subgraph of the graph
 	 */
-	public DynamicGraph<T>	filterVertices(String key, String filter);
+	public DynamicGraph<T>	filterVertices(String key, T filter);
 
 	/**
 	 * Generate the adjacency matrix represantation of the graph
