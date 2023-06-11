@@ -1,3 +1,4 @@
+import java.util.Hashtable;
 import java.util.Map;
 
 /*
@@ -38,6 +39,7 @@ public class Vertex<T> {
 		this.id = id;
 		this.label = label;
 		this.weight = weight;
+		this.properties = new Hashtable<>();
 	}
 
 	/**
