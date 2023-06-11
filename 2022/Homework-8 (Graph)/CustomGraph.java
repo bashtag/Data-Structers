@@ -2,7 +2,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Predicate;
 
 /**
  * T is a type of vertex properties
@@ -14,6 +13,12 @@ public class CustomGraph<T> implements DynamicGraph<T> {
 	private List<List<Edge<T>>>	adjacencyList;
 	/* the graph is directed or undirected */
 	private boolean	isDirect;
+	/* number of vertices */
+	private int	numV = 0;
+	/* number of edges */
+	private int	numE = 0;
+	/* counter to trace the elements */
+	private int	counter = 0;
 
 	/**
 	 * Constructs the Graph
@@ -24,13 +29,25 @@ public class CustomGraph<T> implements DynamicGraph<T> {
 		this.isDirect = isDirected;
 	}
 
+	public int	getSize() {
+		return (this.vertices.size());
+	}
+
+	/**
+	 * Get the number of edges
+	 * @return the number of edges
+	 */
+	public int	getNumE() {
+		return (this.numE);
+	}
+
 	/**
 	 * Get the number of vertices
 	 * @return number of vertices
 	 */
 	@Override
 	public int getNumV() {
-		return (this.vertices.size());
+		return (this.numV);
 	}
 
 	/**
@@ -43,30 +60,95 @@ public class CustomGraph<T> implements DynamicGraph<T> {
 	}
 
 	/**
+	 * Is given index on the graph or not
+	 * @param vertex
+	 * @return is vertex find
+	 */
+	@Override
+	public boolean	containsVertex(Vertex<T> vertex) {
+		if (vertex == null)
+			return (false);
+
+		for (Vertex<T> vrtx : this.vertices)
+			if (vrtx.getId() == vertex.getId())
+				return (true);
+
+		return (false);
+	}
+
+	/**
 	 * insert an edge to the graph
 	 */
 	@Override
 	public void insert(Edge<T> edge) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'insert'");
+		this.addEdge(edge.getSource().getId(), edge.getSource().getId(), edge.getWeight());
 	}
 
+	/**
+	 * Determine whether an edge exists.
+	 * @param source The source vertex
+	 * @param dest The destination vertex
+	 * @return true if theere is an edge from source to dest
+	 */
 	@Override
 	public boolean isEdge(Vertex<T> source, Vertex<T> dest) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'isEdge'");
+		return (this.getEdge(source, dest) != null);
 	}
 
+	/**
+	 * Get the edge between two vertices.
+	 * @param source The source vertex
+	 * @param dest The destination vertex
+	 * @return The Edge between these two vertices
+	 * or null if there is no edge.
+	 */
 	@Override
 	public Edge<T> getEdge(Vertex<T> source, Vertex<T> dest) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'getEdge'");
+		/* all edges */
+		for (int i = 0; i < this.vertices.size(); ++i) {
+			List<Edge<T>>	edges = this.adjacencyList.get(i);
+
+			if (edges == null)
+				continue;
+
+			for (Edge<T> edge : edges)
+				if (edge.getSource().equals(source) && edge.getDest().equals(dest))
+					return (edge);
+		}
+
+		return (null);
 	}
 
+	/**
+	 * Return an iterator to the edges connected to a given vertex.
+	 * @param source The source vertex
+	 * @return An Iterator<Edge> to the vertices connected to source
+	 */
 	@Override
-	public Iterator<Edge<T>> edgeIterator(int source) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'edgeIterator'");
+	public Iterator<Edge<T>> edgeIterator(int sourceId) {
+		return (new EdgeIterator<>(this.adjacencyList, sourceId));
+	}
+
+	/**
+	 * iterator for edges connected a vertex
+	 */
+	public static class	EdgeIterator<T> implements Iterator<Edge<T>> {
+		private final List<Edge<T>>	edgeList;
+		private int	index = 0;
+
+		public EdgeIterator(List<List<Edge<T>>> adjacencyList, int vertexId) {
+			edgeList = adjacencyList.get(vertexId);
+		}
+
+		@Override
+		public boolean	hasNext() {
+			return (index != edgeList.size());
+		}
+
+		@Override
+		public Edge<T>	next() {
+			return (edgeList.get(index++));
+		}
 	}
 
 	/**
@@ -77,22 +159,27 @@ public class CustomGraph<T> implements DynamicGraph<T> {
 	 */
 	@Override
 	public Vertex<T> newVertex(String label, double weight) {
-		return (new Vertex<>(vertices.size(), label, weight));
+		return (new Vertex<>(this.counter++, label, weight));
 	}
 
 	/**
-	 * 
+	 * Add a Vertex to the Graph
+	 * @param newVertex
+	 * @return if this operation is happen
 	 */
 	@Override
 	public boolean addVertex(Vertex<T> newVertex) {
 		int id = newVertex.getId();
-		
 		/* id must be equal the index of adjacency list */
-		if (id >= this.getNumV())
-			for (int i = this.getNumV(); i <= id; ++i)
-				this.adjacencyList.add(new ArrayList<>());;
+		if (id >= this.adjacencyList.size())
+			for (int i = this.adjacencyList.size(); i <= id; ++i) {
+				this.adjacencyList.add(new ArrayList<>());
+				if (i != id)
+					this.vertices.add(null);
+			}
 
 		vertices.add(newVertex);
+		++this.numV;
 		return (true);
 	}
 
@@ -106,7 +193,7 @@ public class CustomGraph<T> implements DynamicGraph<T> {
 	@Override
 	public boolean addEdge(int vertexId1, int vertexId2, double weight) {
 		/* parameter check */
-		if (vertexId1 >= this.getNumV() ||vertexId2 >= this.getNumV())
+		if (vertexId1 >= this.getNumV() || vertexId2 >= this.getNumV())
 			return (false);
 
 		/* getting vertices */
@@ -123,8 +210,10 @@ public class CustomGraph<T> implements DynamicGraph<T> {
 		if (!this.isDirected()) {
 			Edge<T>	reverseEdge = new Edge<>(dest, source, weight);
 			this.adjacencyList.get(vertexId2).add(reverseEdge);
+			++this.numE;
 		}
 		
+		++this.numE;
 		return (true);
 	}
 
@@ -152,8 +241,10 @@ public class CustomGraph<T> implements DynamicGraph<T> {
 		if (!this.isDirected()) {
 			connectedEdges = this.adjacencyList.get(vertexId2);
 			connectedEdges.removeIf(e -> e.getDest().getId() == vertexId1);
+			--this.numE;
 		}
 
+		--this.numE;
 		return (true);
 	}
 
@@ -178,8 +269,14 @@ public class CustomGraph<T> implements DynamicGraph<T> {
 
 		/* Remove incoming edges to the vertex */
 		for (List<Edge<T>> edges : this.adjacencyList)
-			edges.removeIf(edge -> edge.getDest().getId() == vertexId);
+			edges.removeIf(edge -> {
+					boolean	remove = edge.getDest().getId() == vertexId;
+					if (remove)
+						--this.numE;
+					return (remove);
+				});
 
+		--this.numV;
 		return (true);
 	}
 
@@ -193,41 +290,167 @@ public class CustomGraph<T> implements DynamicGraph<T> {
 
 		Optional<Vertex<T>>	optionalVertex = this.vertices
 											.stream()
-											.filter(vertex -> vertex.getLabel().equals(label))
+											.filter(vertex -> vertex != null ? vertex.getLabel().equals(label) : false)
 											.findFirst();
 										
 		if (!optionalVertex.isPresent())
 			return (false);
 
 		/* Set the vertex to null cause of raising index errors */
-		this.vertices.replaceAll(vertex ->  vertex.getLabel().equals(label) ? null : vertex);
+		this.vertices.replaceAll(vertex ->  vertex == null || vertex.getLabel().equals(label) ? null : vertex);
 
 		for (List<Edge<T>> edges : this.adjacencyList) {
 			/* Remove outgoing edges from the vertex */
-			edges.removeIf(edge -> edge.getSource().getLabel().equals(label));
+			edges.removeIf(edge -> {
+										boolean remove = edge.getSource().getLabel().equals(label);
+										if (remove)
+											--this.numE;
+										return (remove);
+									});
 			/* Remove incoming edges to the vertex */
-			edges.removeIf(edge -> edge.getDest().getLabel().equals(label));
+			edges.removeIf(edge -> {
+										boolean remove = edge.getDest().getLabel().equals(label);
+										if (remove)
+											--this.numE;
+										return (remove);
+									});
 		}
+
+		--this.numV;
 
 		return (true);
 	}
 
+	/**
+	 * Filter the vertices by the given property
+	 * @param key
+	 * @param filter
+	 * @return a subgraph of the graph
+	 */
 	@Override
-	public DynamicGraph<T> filterVertices(String key, String filter) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'filterVertices'");
+	public DynamicGraph<T> filterVertices(String key, T filter) {
+		DynamicGraph<T>	filteredGraph = new CustomGraph<>(this.isDirect);
+
+		/* all vertices */
+		for (int i = 0; i < this.vertices.size(); ++i) {
+			Vertex<T>	vertex = this.vertices.get(i);
+
+			if (vertex == null)
+				continue;
+
+			T	propertyValue = vertex.getProperty(key);
+
+			if (propertyValue != null && propertyValue.equals(filter))
+				filteredGraph.addVertex(new Vertex<>(vertex.getId(), vertex.getLabel(), vertex.getWeight()));
+		}
+
+		/* all edges */
+		for (int i = 0; i < this.vertices.size(); ++i) {
+			List<Edge<T>>	edges = this.adjacencyList.get(i);
+
+			if (edges == null)
+				continue;
+
+			for (Edge<T> edge : edges) {
+				Vertex<T>	source = edge.getSource();
+				Vertex<T>	dest = edge.getDest();
+
+				if (filteredGraph.containsVertex(source) && filteredGraph.containsVertex(dest))
+					filteredGraph.addEdge(source.getId(), dest.getId(), edge.getWeight());
+			}
+		}
+
+		return (filteredGraph);
 	}
 
+	/**
+	 * Generate the adjacency matrix represantation of the graph
+	 * @return the matrix
+	 */
 	@Override
 	public double[][] exportMatrix() {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'exportMatrix'");
+		int	size = this.vertices.size();
+		double[][]	matrix = new double[size][size];
+
+		/* initialize with zero */
+		for (int i = 0; i < size; ++i)
+			for (int j = 0; j < size; ++j)
+				matrix[i][j] = 0;
+
+		/* Iterate over all edges in the graph */
+		for (int i = 0; i < size; ++i) {
+			List<Edge<T>>	edges = this.adjacencyList.get(i);
+
+			/* update matrix */
+			for (Edge<T> edge : edges) {
+				int	sourceIndex = edge.getSource().getId();
+				int	destIndex = edge.getDest().getId();
+				double	weight = edge.getWeight();
+
+				/* set the weight */
+				matrix[sourceIndex][destIndex] = weight;
+				
+				/* set if the graph is undirected */
+				if (!this.isDirected())
+					matrix[destIndex][sourceIndex] = weight;
+			}
+		}
+		
+		return (matrix);
 	}
 
+	/**
+	 * Print the Graph
+	 */
 	@Override
 	public void printGraph() {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'printGraph'");
+		System.out.println("Number of vertices on the Graph: " + this.getNumV());
+		System.out.println("Number of edges on the Graph: " + this.getNumE());
+
+		/* write all of the vertices and edges */
+		for (int i = 0; i < this.vertices.size(); ++i) {
+			Vertex<T>	vertex = this.vertices.get(i);
+			List<Edge<T>>	edges = this.adjacencyList.get(i);
+			
+			if (vertex == null || edges == null)
+				continue;
+
+			System.out.print(vertex.getId() + ": ");
+			for (Edge<T> edge : edges)
+				System.out.print(edge.getDest().getId() + " ");
+			System.out.println();
+		}
 	}
 
+	/**
+	 * get Vertex at the index
+	 */
+	@Override
+	public Vertex<T> getVertex(int index) {
+		try {
+			return (this.vertices.get(index));
+		} catch (ArrayIndexOutOfBoundsException e) {
+			return (null);
+		}
+	}
+
+	/**
+	 * get edges at the id
+	 */
+	@Override
+	public List<Edge<T>> getEdges(int vertexId) {
+		try {
+			return (this.adjacencyList.get(vertexId));
+		} catch (ArrayIndexOutOfBoundsException e) {
+			return (null);
+		}
+	}
+
+	/**
+	 * get all vertices
+	 */
+	@Override
+	public List<Vertex<T>> getVertices() {
+		return (this.vertices);
+	}
 }
