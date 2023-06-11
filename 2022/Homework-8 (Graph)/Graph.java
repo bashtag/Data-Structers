@@ -1,4 +1,5 @@
 import	java.util.Iterator;
+import java.util.List;
 
 /**
  * Interface to specify a Graph ADT. A graph is a set of vertices and
@@ -47,6 +48,18 @@ public interface Graph<T> {
 	 * or null if there is no edge.
 	 */
 	public Edge<T>	getEdge(Vertex<T> source, Vertex<T> dest);
+	
+	/**
+	 * Get the Vertex at the index.
+	 * @return The Vertex or null if there is no vertex.
+	 */
+	public Vertex<T>	getVertex(int index);
+
+	/**
+	 * Get list of edges from the graph using id
+	 * @return The List of edges or null
+	 */
+	public List<Edge<T>>	getEdges(int vertexId);
 
 	/**
 	 * Return an iterator to the edges connected to a given vertex.
@@ -54,4 +67,6 @@ public interface Graph<T> {
 	 * @return An Iterator<Edge> to the vertices connected to source
 	 */
 	public Iterator<Edge<T>>	edgeIterator(int source);
+
+	public List<Vertex<T>>	getVertices();
 }
